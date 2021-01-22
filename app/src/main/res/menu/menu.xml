@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single" />
+    <item
+        android:id="@+id/favoritesFragment"
+        android:icon="@drawable/ic_looks_one"
+        android:title="@string/favorites_fragment_title" />
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single" />
+    <item
+        android:id="@+id/leagueTableFragment"
+        android:icon="@drawable/ic_looks_two"
+        android:title="@string/league_table_fragment_title" />
+    <item
+        android:id="@+id/kindFragment"
+        android:icon="@drawable/ic_looks_three"
+        android:title="@string/kindFragmentTitle" />
+</menu>

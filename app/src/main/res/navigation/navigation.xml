@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navi"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.mvvm.ui.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/kindFragment"
+        android:name="com.example.mvvm.ui.ThreeFragment"
+        android:label="ThreeFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.mvvm.ui.FavoritesFragment"
+        android:label="OneFragment" />
+    <fragment
+        android:id="@+id/leagueTableFragment"
+        android:name="com.example.mvvm.ui.TwoFragment"
+        android:label="TwoFragment" />
+    <fragment
+        android:id="@+id/webContentFragment2"
+        android:name="com.example.mvvm.ui.WebContentFragment"
+        android:label="WebContentFragment" /><action android:id="@+id/action_global_homeFragment" app:destination="@id/homeFragment"/><action android:id="@+id/action_global_threeFragment" app:destination="@id/kindFragment"/><action android:id="@+id/action_global_oneFragment" app:destination="@id/favoritesFragment"/><action android:id="@+id/action_global_twoFragment" app:destination="@id/leagueTableFragment"/><action android:id="@+id/action_global_webContentFragment2" app:destination="@id/webContentFragment2"/>
+</navigation>
