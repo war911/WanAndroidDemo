@@ -4,8 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,18 +18,14 @@ import androidx.lifecycle.observe
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvm.R
-import com.example.mvvm.base.DataBindingAdapter
+import com.example.mvvm.base.HomeDataBindingAdapter
 import com.example.mvvm.data.MainBanner
 import com.example.mvvm.databinding.HomeLayoutBinding
 import com.example.mvvm.model.HomeViewModel
 import com.example.mvvm.utils.GlideImageLoader
-import com.example.mvvm.utils.dp2px
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
-import kotlinx.android.synthetic.main.home_layout.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
@@ -40,8 +40,7 @@ class HomeFragment : Fragment() {
     private val bannerImages = mutableListOf<String>()
     private val bannerTitles = mutableListOf<String>()
     private val bannerUrls = mutableListOf<String>()
-    private lateinit var pagerListQuicklyAdapter: DataBindingAdapter
-    private var height:Int = 0
+    private lateinit var pagerListQuicklyAdapter: HomeDataBindingAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,35 +52,17 @@ class HomeFragment : Fragment() {
         bing.homeModel = model
         bing.lifecycleOwner = this
 
+        model.showView.value = true
         bing.swLayout.setOnRefreshListener {
-            GlobalScope.launch {
-                model.getMainData()
-            }
+            model.showViewTop.postValue(true)
+            model.getMainData()
         }
 
         bing.swLayout.isRefreshing = model.showView.value!!
 
-
-        bing.recyclerView.viewTreeObserver.addOnWindowAttachListener(object :
-            ViewTreeObserver.OnWindowAttachListener {
-            override fun onWindowDetached() {
-                Log.d(TAG, "onWindowDetached: ")
-            }
-
-            override fun onWindowAttached() {
-                Log.d(TAG, "onWindowAttached: ")
-                model.showView.postValue(true)
-                bing.swLayout.isRefreshing = false
-            }
-
-        })
-
-
-
-
-        model.showView.observe(viewLifecycleOwner) {
+        model.showViewTop.observe(viewLifecycleOwner) {
             Log.d(TAG, "onCreateView: change 停下来 $it")
-            bing.swLayout.isRefreshing = false
+            bing.swLayout.isRefreshing = it
         }
         return bing.root
     }
@@ -91,11 +72,10 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
 
-
         bing.recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        pagerListQuicklyAdapter = DataBindingAdapter()
+        pagerListQuicklyAdapter = HomeDataBindingAdapter()
 
         bing.recyclerView.adapter = pagerListQuicklyAdapter
 
@@ -130,9 +110,30 @@ class HomeFragment : Fragment() {
         initBanner()
 
         pagerListQuicklyAdapter.addHeaderView(banner)
-        pagerListQuicklyAdapter.setOnItemClickListener { _, view, position ->
-            val bundle = bundleOf("key" to pagerListQuicklyAdapter.data[position].link)
-            Navigation.findNavController(view).navigate(R.id.webContentFragment2, bundle)
+        pagerListQuicklyAdapter.addChildClickViewIds(R.id.conHomeLayout, R.id.homeShine)
+        pagerListQuicklyAdapter.setOnItemChildClickListener { _, view, position ->
+            if (view.id == R.id.homeShine) {
+                pagerListQuicklyAdapter.data[position].let {
+                    if (it.collect) {
+                        model.unCollect(it.id)
+                        it.collect = false
+                    } else {
+                        model.collect(it.id, object : HomeViewModel.CallBack {
+                            override fun onSuccess() {
+                                it.collect = true
+                            }
+
+                            override fun onFail() {
+                                Toast.makeText(activity, "先登录啊大哥", Toast.LENGTH_SHORT).show()
+
+                            }
+                        })
+                    }
+                }
+            } else {
+                val bundle = bundleOf("key" to pagerListQuicklyAdapter.data[position].link)
+                Navigation.findNavController(view).navigate(R.id.webContentFragment2, bundle)
+            }
         }
 
         model.mainPageData.observe(this, Observer {
@@ -161,26 +162,17 @@ class HomeFragment : Fragment() {
                 }
             })
 
-
-        /**
-         * 跳转默认是replace
-         */
-//        Navigation.findNavController(tv).navigate(R.id.action_global_oneFragment)
-
     }
 
 
     private fun initBanner() {
         val wm = activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-
         val width = wm.defaultDisplay.width //屏幕宽度
-
         banner.run {
             layoutParams =
                 LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    width/16*9
+                    width / 16 * 9
                 )
             setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE)
             setImageLoader(GlideImageLoader())
@@ -215,11 +207,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ")
-        if (!sw_layout.isRefreshing) {
-            GlobalScope.launch {
-                model.getMainData()
-            }
-        }
+        model.getMainData()
     }
 
 
@@ -238,4 +226,12 @@ class HomeFragment : Fragment() {
         Log.d(TAG, "onDestroyView: ")
         pagerListQuicklyAdapter.removeHeaderView(banner)
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: ")
+        model.showView.value = false
+    }
+
+
 }

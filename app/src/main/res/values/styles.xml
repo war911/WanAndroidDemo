@@ -8,6 +8,8 @@
         <item name="android:forceDarkAllowed">true</item>
     </style>
     <style name="NavigationDrawerStyle" >
+        <item name="android:divider">@color/white</item>
+        <item name="android:dividerHeight">2dp</item>
         <item name="android:textSize">18sp</item>
     </style>
 </resources>

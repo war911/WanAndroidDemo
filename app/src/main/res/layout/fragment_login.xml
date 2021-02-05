@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLoginName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="账号"
@@ -42,6 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLoginPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="密码"
@@ -63,6 +65,7 @@
         android:layout_height="wrap_content">
         <Button
             android:text="登录"
+            android:id="@+id/btnLogin"
             android:layout_weight="1"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
@@ -70,8 +73,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <Button
+            android:id="@+id/btnSignUp"
             android:text="注册"
             android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintHorizontal_bias="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>

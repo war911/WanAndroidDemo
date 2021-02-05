@@ -3,6 +3,11 @@ package com.example.mvvm.net
 import android.content.Context
 import android.os.Environment
 import com.example.mvvm.App.Companion.mContext
+import com.example.mvvm.interceptor.LogInterceptor
+import com.franmontiel.persistentcookiejar.ClearableCookieJar
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.google.gson.Gson
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -23,7 +28,7 @@ class ApiManager() {
     companion object {
         private var apiManager: ApiManager = ApiManager()
         private lateinit var baseRetrofit: Retrofit
-        fun getApiManager(): ApiManager? {
+        public fun getApiManager(): ApiManager? {
             return apiManager
         }
 
@@ -32,12 +37,18 @@ class ApiManager() {
             val cacheDir = File(getProjectCachePath(mContext), "okhttp")
             val mCache = Cache(cacheDir, 8 * 1024 * 1024)
 
+            val cookieJar: ClearableCookieJar =
+                PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(mContext))
             val client = OkHttpClient.Builder()
                 .callTimeout(5, TimeUnit.SECONDS)
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
                 .cache(mCache)
+                //失败重连
+                .retryOnConnectionFailure(true)
+                .cookieJar(cookieJar)
+                .addInterceptor(LogInterceptor())//添加打印拦截器
                 .build()
 
             baseRetrofit = Retrofit.Builder()
@@ -62,8 +73,5 @@ class ApiManager() {
     fun getBaseNet(): Retrofit {
         return baseRetrofit;
     }
-
-
-
 
 }

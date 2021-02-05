@@ -40,14 +40,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:text="加载中"
-            android:textColor="#ffffff"
+        <ProgressBar
+            android:id="@+id/img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:gravity="center"
-            android:background="#000000"
-            android:visibility="@{homeModel.showView?View.GONE:View.VISIBLE}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:visibility="@{homeModel.showView?View.VISIBLE:View.GONE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -5,14 +5,23 @@
     <data>
         <import type="android.view.View" alias="View"/>
         <variable
-            name="oneModel"
-            type="com.example.mvvm.model.OneViewModel" />
+            name="model"
+            type="com.example.mvvm.model.FavoritesViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/favoritesFresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favoritesRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

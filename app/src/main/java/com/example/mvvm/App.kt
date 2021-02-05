@@ -3,6 +3,7 @@ package com.example.mvvm
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
+import com.chad.library.adapter.base.module.LoadMoreModuleConfig
 
 class App : Application() {
     companion object{
@@ -17,5 +18,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         mContext = this
+        LoadMoreModuleConfig.defLoadMoreView
     }
 }

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "applicationId": "com.sackcentury.shinebuttonlib",
+  "variantType": "LIBRARY",
+  "elements": [
+    {
+      "outputType": {
+        "type": "MERGED_MANIFESTS"
+      },
+      "apkData": {
+        "type": "MAIN",
+        "splits": [],
+        "versionCode": 9,
+        "versionName": "0.1.9",
+        "outputFile": "shinButton-debug.aar",
+        "fullName": "debug",
+        "baseName": "debug",
+        "dirName": ""
+      },
+      "path": "../../library_manifest/debug/AndroidManifest.xml",
+      "properties": {
+        "packageId": "com.sackcentury.shinebuttonlib",
+        "split": ""
+      }
+    }
+  ]
+}

@@ -1,2 +1,4 @@
+include ':hivelayoutmanager-library'
+include ':shinButton'
 include ':app'
 rootProject.name = "MvvM"
